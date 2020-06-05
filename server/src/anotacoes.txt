@@ -1,0 +1,50 @@
+import express from 'express';
+
+const app = express();
+
+app.use(express.json());
+
+//Rota: Endereco completo da requisição
+//Recurso: Qual entidade estamos acessando do sistema
+
+
+//GET: Busca uma ou mais informações do back-end
+//PUT: Criar uma nova informacao no back-end
+//PUT: Atualizar uma informação do back-end
+//DELETE: Remover uma informação do back-end
+
+//GET http://localhosta:3333/users/id_do_usario = Dados de 1
+//GET http://localhosta:3333/users = Lista de todos
+
+//Request Param: Parâmetros que vem na própria URL (Obrigatório)
+//Query Param: Parâmetros que vem na própria URL para filtros (Opcionais)
+//Request Body: Parâmetros para criação ou atualização de informações
+
+const users = ['Diego','Cleiton','Robson', 'Daniel'];
+app.get('/users', (request, response) => {
+    const search = String(request.query.search);
+
+    const filteredUsers = search ? users.filter(user => user.includes(search)) : users;
+    
+    response.json(filteredUsers);
+});
+
+
+app.get('/users/:id', (request, response) => {
+    const id = Number(request.params.id);
+
+    const user = users[id];
+    response.json(user);
+});
+
+
+app.post('/users', (request, response) => {
+    const data = request.body;
+
+    const user = {
+        name: data.name,
+        email: data.email
+    };
+    return response.json(user);
+});
+app.listen(3333);
